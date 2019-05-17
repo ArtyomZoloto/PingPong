@@ -112,7 +112,7 @@
                               [self checkOutside];
                           }];
     
-    NSTimer *opponentTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f repeats:YES block:^(NSTimer * _Nonnull timer) {
+    NSTimer *opponentTimer = [NSTimer scheduledTimerWithTimeInterval:0.5f repeats:YES block:^(NSTimer * _Nonnull timer) {
         self.opponentPate.center = CGPointMake(self.ball.center.x, self.opponentPate.center.y);
     }];
     
