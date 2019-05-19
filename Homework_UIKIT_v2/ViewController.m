@@ -1,6 +1,7 @@
 #import "ViewController.h"
 #import "AZPlate.h"
 #import "AZBall.h"
+#import "AZScore.h"
 
 @interface ViewController ()
 @property (strong, nonatomic) AZBall *ball;
@@ -8,12 +9,11 @@
 @property (strong, nonatomic) AZPlate *opponentPate;
 @property (strong, nonatomic) UIButton *startButton;
 @property (assign, nonatomic) BOOL isStarted;
-@property (assign, nonatomic) long yourScore;
-@property (assign, nonatomic) long opponentScore;
 @property (strong, nonatomic) UILabel *opponentScoreLabel;
 @property (strong, nonatomic) UILabel *yourScoreLabel;
 @property (strong, nonatomic) NSArray<NSTimer*>* timers;
 @property (strong, nonatomic) NSTimer *attachBallToPlateTimer;
+@property (strong, nonatomic) AZScore *score;
 
 @end
 
@@ -22,15 +22,26 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self restoreScore];
     [self addStartButton];
     [self addPlate];
     [self addOpponentPlate];
     [self addBall];
     [self addControls];
     [self stopGame];
+
+
 }
 
-
+-(void) restoreScore
+{
+    NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:@"score"];
+    //self.score = [NSKeyedUnarchiver unarchivedObjectOfClass:AZScore.class fromData:data error:nil];
+    self.score = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    if (!self.score){
+        self.score = [AZScore new];
+    }
+}
 
 - (BOOL)isOnPlayerPlate
 {
@@ -65,20 +76,23 @@
 -(void) checkOutside
 {
     
-    BOOL youWin = (self.ball.frame.origin.y > self.plate.frame.origin.y);
-    BOOL youLoose = (self.ball.frame.origin.y < self.opponentPate.frame.origin.y);
+    BOOL youLoose = (self.ball.frame.origin.y > self.plate.frame.origin.y);
+    BOOL youWin = (self.ball.frame.origin.y < self.opponentPate.frame.origin.y);
     
     if (youWin){
-        self.opponentScoreLabel.text = [NSString stringWithFormat:@"%ld", ++self.opponentScore];
+        self.yourScoreLabel.text = [NSString stringWithFormat:@"%ld", ++self.score.yourScore];
     }
     if (youLoose){
-        self.yourScoreLabel.text = [NSString stringWithFormat:@"%ld", ++self.yourScore];
-        
-        
+        self.opponentScoreLabel.text = [NSString stringWithFormat:@"%ld", ++self.score.opponentScore];
     }
     
     if (youWin || youLoose){
         [self stopGame];
+        NSError *error;
+        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.score requiringSecureCoding:NO error:&error];
+        [[NSUserDefaults standardUserDefaults] setObject:data forKey:@"score"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+
     }
     
 }
@@ -111,7 +125,7 @@
                               [self checkOutside];
                           }];
     
-    NSTimer *opponentTimer = [NSTimer scheduledTimerWithTimeInterval:0.5f repeats:YES block:^(NSTimer * _Nonnull timer) {
+    NSTimer *opponentTimer = [NSTimer scheduledTimerWithTimeInterval:0.3f repeats:YES block:^(NSTimer * _Nonnull timer) {
         self.opponentPate.center = CGPointMake(self.ball.center.x, self.opponentPate.center.y);
     }];
     
@@ -126,14 +140,16 @@
     [self.startButton setTitle:@"continue" forState:UIControlStateNormal];
 }
 
-- (void)stopTimers {
+- (void)stopTimers
+{
     for(NSTimer *t in self.timers){
         [t invalidate];
     }
     self.timers = nil;
 }
 
--(void) stopGame {
+-(void) stopGame
+{
     [self stopTimers];
     self.attachBallToPlateTimer = [NSTimer scheduledTimerWithTimeInterval:0.001f repeats:YES block:^(NSTimer * _Nonnull timer) {
         [self fixBallToPlate];
@@ -144,6 +160,15 @@
     [self.startButton addTarget:self action:@selector(startGame) forControlEvents:UIControlEventTouchUpInside];
 }
 
+
+-(void) newGame
+{
+    self.score = [AZScore new];
+    self.opponentScoreLabel.text = [NSString stringWithFormat:@"%ld", self.score.opponentScore];
+    self.yourScoreLabel.text = [NSString stringWithFormat:@"%ld", self.score.yourScore];
+
+
+}
 
 - (void)addBall
 {
@@ -168,27 +193,26 @@
 
 -(void) addControls
 {
-    
     self.startButton = [UIButton buttonWithType:UIButtonTypeSystem];
     self.startButton.frame = CGRectMake(0, 0, 0, 0);
     [self.startButton setTitle:@"play" forState:UIControlStateNormal];
     [self.startButton addTarget:self action:@selector(startGame) forControlEvents:UIControlEventTouchUpInside];
-    
-    [self.view addSubview:self.startButton];
-    
-    
     self.opponentScoreLabel = [UILabel new];
+    self.opponentScoreLabel.text = [NSString stringWithFormat:@"%ld", self.score.opponentScore];
     self.yourScoreLabel = [UILabel new];
+    self.yourScoreLabel.text = [NSString stringWithFormat:@"%ld", self.score.yourScore];
     self.opponentScoreLabel.textAlignment = self.yourScoreLabel.textAlignment = NSTextAlignmentCenter;
-    UIStackView *board = [[UIStackView alloc] initWithArrangedSubviews:@[self.opponentScoreLabel, self.yourScoreLabel, self.startButton]];
-    //board.center = CGPointMake(50, CGRectGetMidY(self.view.bounds));
+    
+    UIButton *resetButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [resetButton setTitle:@"New Game" forState:UIControlStateNormal];
+    [resetButton addTarget:self action:@selector(newGame) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIStackView *board = [[UIStackView alloc] initWithArrangedSubviews:@[self.opponentScoreLabel, self.yourScoreLabel, self.startButton, resetButton]];
     board.axis = UILayoutConstraintAxisVertical;
     board.spacing = 50.0f;
-    board.frame = CGRectMake(0, CGRectGetMidY(self.view.bounds)-100, 100, 200);
+    board.frame = CGRectMake(0, CGRectGetMidY(self.view.bounds)-150, 100, 300);
     [self.view addSubview:board];
-    
-    self.yourScore = self.opponentScore = 0;
-    self.opponentScoreLabel.text = self.yourScoreLabel.text = @"0";
 }
+
 
 @end

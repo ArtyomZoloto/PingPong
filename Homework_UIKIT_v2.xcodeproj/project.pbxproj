@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		42E1F279228DDBE400CF6F59 /* AZBall.m in Sources */ = {isa = PBXBuildFile; fileRef = 42E1F278228DDBE400CF6F59 /* AZBall.m */; };
+		882D5B152291C6C200847688 /* AZScore.m in Sources */ = {isa = PBXBuildFile; fileRef = 882D5B142291C6C200847688 /* AZScore.m */; };
 		883B1A91226B8EA100ED5553 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 883B1A90226B8EA100ED5553 /* AppDelegate.m */; };
 		883B1A94226B8EA100ED5553 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 883B1A93226B8EA100ED5553 /* ViewController.m */; };
 		883B1A97226B8EA100ED5553 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 883B1A95226B8EA100ED5553 /* Main.storyboard */; };
@@ -20,6 +21,8 @@
 /* Begin PBXFileReference section */
 		42E1F277228DDBE400CF6F59 /* AZBall.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AZBall.h; sourceTree = "<group>"; };
 		42E1F278228DDBE400CF6F59 /* AZBall.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AZBall.m; sourceTree = "<group>"; };
+		882D5B132291C6C200847688 /* AZScore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AZScore.h; sourceTree = "<group>"; };
+		882D5B142291C6C200847688 /* AZScore.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AZScore.m; sourceTree = "<group>"; };
 		883B1A8C226B8EA100ED5553 /* Homework_UIKIT_v2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Homework_UIKIT_v2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		883B1A8F226B8EA100ED5553 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		883B1A90226B8EA100ED5553 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -77,6 +80,8 @@
 				883B1AA6226B8EB400ED5553 /* AZPlate.m */,
 				42E1F277228DDBE400CF6F59 /* AZBall.h */,
 				42E1F278228DDBE400CF6F59 /* AZBall.m */,
+				882D5B132291C6C200847688 /* AZScore.h */,
+				882D5B142291C6C200847688 /* AZScore.m */,
 			);
 			path = Homework_UIKIT_v2;
 			sourceTree = "<group>";
@@ -154,6 +159,7 @@
 				42E1F279228DDBE400CF6F59 /* AZBall.m in Sources */,
 				883B1AA7226B8EB400ED5553 /* AZPlate.m in Sources */,
 				883B1A94226B8EA100ED5553 /* ViewController.m in Sources */,
+				882D5B152291C6C200847688 /* AZScore.m in Sources */,
 				883B1A9F226B8EA300ED5553 /* main.m in Sources */,
 				883B1A91226B8EA100ED5553 /* AppDelegate.m in Sources */,
 			);
