@@ -11,10 +11,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface AZBall : UIImageView
-@property (assign, nonatomic) CGSize vector;
+@property (assign, nonatomic) CGVector vector;
 -(void) move;
 -(void) stop;
--(void) launch;
 -(void) flipX;
 -(void) flipY;
 @end

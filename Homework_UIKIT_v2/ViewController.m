@@ -13,7 +13,7 @@
 @property (strong, nonatomic) UILabel *opponentScoreLabel;
 @property (strong, nonatomic) UILabel *yourScoreLabel;
 @property (strong, nonatomic) NSArray<NSTimer*>* timers;
-@property (strong, nonatomic) NSTimer *stickTimer;
+@property (strong, nonatomic) NSTimer *attachBallToPlateTimer;
 
 @end
 
@@ -96,9 +96,8 @@
 
 -(void) startGame
 {
-    [self.stickTimer invalidate];
-    self.stickTimer = nil;
-    [self.ball launch];
+    [self.attachBallToPlateTimer invalidate];
+    self.attachBallToPlateTimer = nil;
     [self.startButton removeTarget:self action:@selector(startGame) forControlEvents:UIControlEventTouchUpInside];
     [self.startButton addTarget:self action:@selector(pauseGame) forControlEvents:(UIControlEvents)UIControlEventTouchUpInside];
     [self.startButton setTitle:@"pause" forState:UIControlStateNormal];
@@ -136,7 +135,7 @@
 
 -(void) stopGame {
     [self stopTimers];
-    self.stickTimer = [NSTimer scheduledTimerWithTimeInterval:0.001f repeats:YES block:^(NSTimer * _Nonnull timer) {
+    self.attachBallToPlateTimer = [NSTimer scheduledTimerWithTimeInterval:0.001f repeats:YES block:^(NSTimer * _Nonnull timer) {
         [self fixBallToPlate];
     }];
     
